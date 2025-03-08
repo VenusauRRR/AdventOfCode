@@ -5,7 +5,7 @@ import java.io.FileReader;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Part1 {
+public class Part1n2 {
 
     static ArrayList leftList = new ArrayList<Integer>();
     static ArrayList rightList = new ArrayList<Integer>();
@@ -64,7 +64,7 @@ public class Part1 {
     }
 
     public static void main(String[] args) {
-        Part1.fileReader("src/main/java/Y2024/D01Historian_Hysteria/Part1_Input");
+        Part1n2.fileReader("src/main/java/Y2024/D01Historian_Hysteria/Input");
         System.out.println("Part 1 " + getDifferenceBtwLists(leftList, rightList));
         System.out.println("Part 2 " + calculateTotalSimilarityScore(leftList, rightList));
     }
