@@ -28,6 +28,7 @@ public class Part1n2 {
         }
     }
 
+    //Part 1
     private static String ifReportIsIncreasingOrDecreasing (ArrayList<Integer> report){
         int temp = report.get(1)-report.get(0);
         if (temp>=1 && temp<=3){
@@ -73,7 +74,6 @@ public class Part1n2 {
     }
 
     private static int countTotalSafeReports (ArrayList<ArrayList<Integer>> reportList){
-        fileReader("src/main/java/Y2024/D02RedNoseReports/Input");
         int count = 0;
         for (int i = 0; i < reportList.size(); i++) {
             String status = ifReportIsIncreasingOrDecreasing(reportList.get(i));
@@ -82,7 +82,34 @@ public class Part1n2 {
         return count;
     }
 
+    //Part 2
+    private static boolean problemDamper (ArrayList<Integer> report){
+        for (int i = 0; i < report.size(); i++) {
+            ArrayList<Integer> tempReport = new ArrayList<>(report);
+            tempReport.remove(i);
+            String tempReport_status = ifReportIsIncreasingOrDecreasing(tempReport);
+            int tempReport_count = count1ifReportSafe(tempReport,tempReport_status);
+            if (tempReport_count == 1){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static int part2_countTotalSafeReports (ArrayList<ArrayList<Integer>> reportList){
+        int count = 0;
+        for (int i = 0; i < reportList.size(); i++) {
+            String status = ifReportIsIncreasingOrDecreasing(reportList.get(i));
+            if (count1ifReportSafe(reportList.get(i), status)==1){
+                count++;
+            } else if (problemDamper(reportList.get(i))){count++;}
+        }
+        return count;
+    }
+
     public static void main(String[] args) {
-        System.out.println(countTotalSafeReports(reportList));
+        fileReader("src/main/java/Y2024/D02RedNoseReports/Input");
+        System.out.println("Part 1: " + countTotalSafeReports(reportList));
+        System.out.println("Part 2: " + part2_countTotalSafeReports(reportList));
     }
 }
