@@ -1,15 +1,14 @@
 package Y2024.D04CeresSearch;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class Part1n2 {
     static ArrayList<String> list = new ArrayList<>();
     static int stringLength;
-    static int count = 0;
+    static int count_part1 = 0;
+    static int count_part2 = 0;
 
     private static void fileReader(){
         String filePath = "src/main/java/Y2024/D04CeresSearch/input";
@@ -29,7 +28,8 @@ public class Part1n2 {
     private static void horizontal(){
         for (int i = 0; i < list.size(); i++) {
             for (int j = 0; j < stringLength-3; j++){
-                if (list.get(i).substring(j,j+4).equals("XMAS")){count++;}
+                if (list.get(i).substring(j,j+4).equals("XMAS")){
+                    count_part1++;}
             }
 
         }
@@ -37,7 +37,8 @@ public class Part1n2 {
         //horizontal - written backwards
         for (int i = 0; i < list.size(); i++) {
             for (int j = 0; j < stringLength-3; j++){
-                if (list.get(i).substring(j,j+4).equals("SAMX")){count++;}
+                if (list.get(i).substring(j,j+4).equals("SAMX")){
+                    count_part1++;}
             }
 
         }
@@ -50,7 +51,7 @@ public class Part1n2 {
                     list.get(i+1).charAt(j)=='M' &&
                     list.get(i+2).charAt(j)=='A' &&
                     list.get(i+3).charAt(j)=='S'){
-                    count++;
+                    count_part1++;
                 }
             }
         }
@@ -62,7 +63,7 @@ public class Part1n2 {
                         list.get(i+1).charAt(j)=='A' &&
                         list.get(i+2).charAt(j)=='M' &&
                         list.get(i+3).charAt(j)=='X'){
-                    count++;
+                    count_part1++;
                 }
             }
         }
@@ -77,7 +78,7 @@ public class Part1n2 {
                 list.get(i+1).charAt(j+1)=='M' &&
                 list.get(i+2).charAt(j+2)=='A' &&
                 list.get(i+3).charAt(j+3)=='S'){
-                    count++;
+                    count_part1++;
                 }
             }
         }
@@ -89,7 +90,7 @@ public class Part1n2 {
                     list.get(i+1).charAt(j+1)=='A' &&
                     list.get(i+2).charAt(j+2)=='M' &&
                     list.get(i+3).charAt(j+3)=='X'){
-                    count++;
+                    count_part1++;
                 }
             }
         }
@@ -101,7 +102,7 @@ public class Part1n2 {
                     list.get(i+1).charAt(j-1)=='M' &&
                     list.get(i+2).charAt(j-2)=='A' &&
                     list.get(i+3).charAt(j-3)=='S'){
-                    count++;
+                    count_part1++;
                 }
             }
         }
@@ -113,7 +114,7 @@ public class Part1n2 {
                     list.get(i+1).charAt(j-1)=='A' &&
                     list.get(i+2).charAt(j-2)=='M' &&
                     list.get(i+3).charAt(j-3)=='X'){
-                    count++;
+                    count_part1++;
                 }
             }
         }
@@ -121,14 +122,73 @@ public class Part1n2 {
     }
 
     private static int totalCount_part1(){
-        fileReader();
         horizontal();
         vertical();
         diagonal();
-        return count;
+        return count_part1;
+    }
+
+    //Part 2
+
+    //right diagonal
+    private static boolean X_rightDiagonal(int i, int j){
+        if (list.get(i).charAt(j)=='M' &&
+                list.get(i+1).charAt(j+1)=='A' &&
+                list.get(i+2).charAt(j+2)=='S'){
+            return true;
+        }
+        return false;
+    }
+
+    //right diagonal - written backwards
+    private static boolean X_rightDiagonalBackwards(int i, int j){
+        if (list.get(i).charAt(j)=='S' &&
+                list.get(i+1).charAt(j+1)=='A' &&
+                list.get(i+2).charAt(j+2)=='M'){
+            return true;
+        }
+        return false;
+    }
+
+    //left diagonal
+    private static boolean X_leftDiagonal(int i, int j){
+        if (list.get(i).charAt(j+2)=='M' &&
+                list.get(i+1).charAt(j+1)=='A' &&
+                list.get(i+2).charAt(j)=='S'){
+            return true;
+        }
+        return false;
+    }
+
+    //left diagonal - written backwards
+    private static boolean X_leftDiagonalBackwards(int i, int j){
+        if (list.get(i).charAt(j+2)=='S' &&
+                list.get(i+1).charAt(j+1)=='A' &&
+                list.get(i+2).charAt(j)=='M'){
+            return true;
+        }
+        return false;
+    }
+
+    private static void checkX_Diagonal(){
+        for (int i = 0; i < list.size()-2; i++){
+            for (int j = 0; j < stringLength-2; j++){
+                if ((X_rightDiagonal(i, j) || X_rightDiagonalBackwards(i,j)) &&
+                        (X_leftDiagonal(i, j) || X_leftDiagonalBackwards(i,j))){
+                    count_part2++;
+                }
+            }
+        }
+    }
+
+    private static int totalCount_part2(){
+        checkX_Diagonal();
+        return count_part2;
     }
 
     public static void main(String[] args) {
+        fileReader();
         System.out.println("Part 1: " + totalCount_part1());
+        System.out.println("Part 2: " + totalCount_part2());
     }
 }
