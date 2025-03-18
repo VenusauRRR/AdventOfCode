@@ -1,13 +1,15 @@
 package Y2024.D05PrintQueue;
 
-import javax.swing.*;
 import java.io.*;
 import java.util.*;
 
 public class Part1n2 {
     static Map<Integer,ArrayList<Integer>> pageOrderList = new HashMap<>();
     static ArrayList<ArrayList<Integer>> updateOrderList = new ArrayList<>();
+    static ArrayList<ArrayList<Integer>> incorrectedList = new ArrayList<>();
+    static ArrayList<ArrayList<Integer>> revisedIncorrectedList = new ArrayList<>();
 
+    //Part 1
     private static void fileReader(String inputFile) {
         try {
             BufferedReader br = new BufferedReader(new FileReader(inputFile));
@@ -51,12 +53,13 @@ public class Part1n2 {
     private static boolean checkIfOrderIsCorrect (ArrayList<Integer> list){
         for (int i = 0; i < list.size()-1; i++) {
             try {
-
-            boolean temp = pageOrderList.get(list.get(i)).contains(list.get(i+1));
-            if (!temp) {
-                return false;
-            }
+                boolean temp = pageOrderList.get(list.get(i)).contains(list.get(i+1));
+                if (!temp) {
+                    incorrectedList.add(list);
+                    return false;
+                }
             } catch (NullPointerException e) {
+                incorrectedList.add(list);
                 return false;
             }
         }
@@ -69,14 +72,41 @@ public class Part1n2 {
         return temp? a : 0;
     }
 
-    private static int totalSumOfMiddleNumbers(){
-        return updateOrderList.stream().mapToInt(i -> findMiddleNumber(i)).sum();
+    private static int totalSumOfMiddleNumbers(ArrayList<ArrayList<Integer>> list){
+        return list.stream().mapToInt(i -> findMiddleNumber(i)).sum();
+    }
+
+    //Part 2
+    private static ArrayList<Integer> fixIncorrectOrderList(ArrayList<Integer> list){
+        ArrayList<Integer> newList = new ArrayList<>(list);
+        int i = 0;
+        boolean a = false;
+        while(i < newList.size()-1){
+            try{
+                a = pageOrderList.get(newList.get(i)).contains(newList.get(i+1));
+            } catch (NullPointerException e) {
+            }
+                if (a){
+                    i++;
+                    a = false;
+                } else {
+                    Collections.swap(newList, i, i+1);
+                    i = 0;
+                }
+        }
+        return newList;
+    }
+
+    private static void revisedOrderList (){
+        for (ArrayList<Integer> list : incorrectedList) {
+            revisedIncorrectedList.add(fixIncorrectOrderList(list));
+        }
     }
 
     public static void main(String[] args) {
-        fileReader("src/main/java/Y2024/D05PrintQueue/Input");
-//        System.out.println(pageOrderList.toString());
-//        System.out.println(updateOrderList.toString());
-        System.out.println(totalSumOfMiddleNumbers());
+        fileReader("src/main/java/Y2024/D05PrintQueue/input");
+        System.out.println("Part 1: " + totalSumOfMiddleNumbers(updateOrderList));
+        revisedOrderList();
+        System.out.println("Part 2: " + totalSumOfMiddleNumbers(revisedIncorrectedList));
     }
 }
