@@ -3,10 +3,12 @@ package Y2024.D06GuardGallivant;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Part1n2 {
     static ArrayList<ArrayList<Character>> board = new ArrayList();
+    static Integer[] currectPosition = new Integer[2];
+    static int currentDirection = 0;
+    static final char[] directions = {'N', 'E', 'S', 'W'};
 
     //read data
     private static void fileReader(String filePath){
@@ -29,19 +31,15 @@ public class Part1n2 {
     }
 
     //find the start location
-    private static Integer[] findStartIndex(ArrayList<ArrayList<Character>> board){
-        int x = -1;
-        int y = -1;
+    private static void findStartIndex(ArrayList<ArrayList<Character>> board){
         for (ArrayList<Character> row : board){
             for (Character c : row){
                 if (c == '^'){
-                    x = row.indexOf(c);
-                    y = board.indexOf(row);
+                    currectPosition[0] = board.indexOf(row);
+                    currectPosition[1] = row.indexOf(c);
                 }
             }
         }
-        System.out.println("x:" + x + " y:" + y);
-        return new Integer[]{x, y};
     }
 
     //check if every location is qualified to win the game
@@ -50,13 +48,26 @@ public class Part1n2 {
                 yIndex==0 || yIndex==board.size()-1) ? true : false;
     }
 
-    //check if there's obstacles at the front
-    //change direction
+    //get next position
+    private static void getNext_N(){
+        for (int i = currectPosition[0]; i >= 0; i--) {
+            if (board.get(i).get(currectPosition[1]) == '#'){
+                currentDirection = (currentDirection+1)%3;
+                board.get(i+1).set(currectPosition[1],'>');
+                break;
+            }
+            board.get(i).set(currectPosition[1],'X');
+            currectPosition[0] = i;
+        }
+    }
+
     //mark "X"
     //check all "X"
 
     public static void main(String[] args) {
         fileReader("src/main/java/Y2024/D06GuardGallivant/testInput");
         findStartIndex(board);
+        getNext_N();
+        System.out.println(board.toString());
     }
 }
