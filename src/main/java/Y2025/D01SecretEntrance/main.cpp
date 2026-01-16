@@ -18,8 +18,12 @@
 
 // }
 
-bool isZero(int number){
-    return number==0;
+void recursion(int &counter, int number){
+    if (number-100 < 0){
+        return;
+    }
+    counter++;
+    recursion(counter, number-100);
 }
 
 void part2_rotateTheSafeAndCountClicks(int &init, int &counter, char direction, std::string move)
@@ -30,46 +34,33 @@ void part2_rotateTheSafeAndCountClicks(int &init, int &counter, char direction, 
     std::cout << "steps: " << steps << std::endl;
     if (direction == 'L'){
         init -= steps;
-        std::cout << "after steps: " << init << std::endl;
-        if (init > 0){
-            std::cout << "init >0: " << init << std::endl;
+        std::cout << "after steps to LEFT: " << init << std::endl;
+        if (origin > steps){
             return;
-        } else if (init%100 == 0){
-            counter = counter + 1 + (init/100);
-
-            std::cout << "couter when init=0: " << counter << std::endl;
-        } else {
-            // if (init < 0)
-            
-            counter = counter + 1 + ((steps-origin)/100);
-            if (origin==0){
-                counter--;
-            }
-            init %= 100;
-            init += 100;
-            std::cout << "init<0: " << init << std::endl;
-            std::cout << "counter when init<0: " << counter << std::endl;
-        }
-    } else {
-        init += steps;
-        std::cout << "after steps: " << init << std::endl;
-        if (init < 100){
-            std::cout << "init<100: " << init << std::endl;
-            return;
-        } else if (init%100==0)
-        {
-            counter += init/100;
+        } else if (origin == steps){
             init = 0;
-            std::cout << "couter when init=0: " << counter << std::endl;
-            std::cout << "init=0: " << init << std::endl;
-        } else {
-            // if (init > 100)
-            counter = counter + init/100;
-            init = init%100;
-            std::cout << "init>0: " << init << std::endl;
-            std::cout << "counter when init>0: " << counter << std::endl;
+            counter++;
+        } else{
+            init = (init%100 + 100)%100;
+            if (origin != 0){
+                counter++;
+            }
+            recursion(counter, abs(steps-origin));
+        }
+    } else { //direction == 'R'
+        init += steps;
+        std::cout << "after steps to RIGHT: " << init << std::endl;
+        if (steps+origin < 100){
+            return;
+        } else if (steps+origin==100){
+            init=0;
+            counter++;
+        } else{
+            init %= 100;
+            recursion(counter,steps+origin);
         }
     }
+    std::cout << "count: " << counter << std::endl;
 }
 
 int main(void)
