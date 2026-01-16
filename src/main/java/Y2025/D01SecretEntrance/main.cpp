@@ -4,26 +4,34 @@
 
 void part1_rotateTheSafe(int &init, int &counter, char direction, std::string move)
 {
-    // int temp = init;
+    int temp = init;
     int steps = std::stoi(move);
+    std::cout << "steps: " << steps << std::endl;
+    std::cout << "init: " << init << std::endl;
     if (direction == 'L')
     {
         init -= steps;
+        std::cout << "init Left 1: " << init << std::endl;
         if (init < 0){
             init %= 100;
             init += 100;
+            std::cout << "init Left 2: " << init << std::endl;
         }
     }
     else
     {
-        init += steps;
+        init += steps; 
+        std::cout << "init Right 1: " << init << std::endl;
         if (init >= 100){
             init %= 100;
+            std::cout << "init Right 2: " << init << std::endl;
         }
     }
     // std::cout << init << std::endl;
     if (init == 0)
         counter++;
+    std::cout << "count: " << counter << std::endl;
+    std::cout << "init end: " << init << std::endl;
 }
 
 // void part2_rotateTheSafeAndCountClicks(int &init, int &counter, char direction, std::string move)
@@ -72,7 +80,7 @@ void part1_rotateTheSafe(int &init, int &counter, char direction, std::string mo
 
 int main(void)
 {
-    std::ifstream inFile("testinput.txt");
+    std::ifstream inFile("input.txt");
     std::string fileLine;
     int countLeftPointAt0 = 0;
     int init = 50;
@@ -84,6 +92,7 @@ int main(void)
         {
             part1_rotateTheSafe(init, countLeftPointAt0, fileLine.at(0), fileLine.substr(1));
             // part2_rotateTheSafeAndCountClicks(init, countLeftPointAt0, fileLine.at(0), fileLine.substr(1));
+            std::cout << std::endl;
         }
     }
     std::cout << "Total count for Point to 0: " << countLeftPointAt0 << std::endl;
