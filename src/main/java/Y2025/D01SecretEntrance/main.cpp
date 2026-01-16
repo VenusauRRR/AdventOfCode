@@ -2,31 +2,90 @@
 #include <fstream>
 #include <string>
 
-void part1_rotateTheSafe(int &init, int &counter, char direction, std::string move){
-    if (direction == 'L'){
-        init -= std::stoi(move)%100;
-        if (init < 0) init += 100;
-    } else {
-        init += std::stoi(move)%100;
-        if (init > 99) init -= 100;
+void part1_rotateTheSafe(int &init, int &counter, char direction, std::string move)
+{
+    // int temp = init;
+    int steps = std::stoi(move);
+    if (direction == 'L')
+    {
+        init -= steps;
+        if (init < 0){
+            init %= 100;
+            init += 100;
+        }
+    }
+    else
+    {
+        init += steps;
+        if (init >= 100){
+            init %= 100;
+        }
     }
     // std::cout << init << std::endl;
-    if (init == 0) counter++;
+    if (init == 0)
+        counter++;
 }
 
-int main(void){
-    std::ifstream inFile("input.txt");
+// void part2_rotateTheSafeAndCountClicks(int &init, int &counter, char direction, std::string move)
+// {
+//     int temp = init;
+//     std::cout << "init: " << temp << std::endl;
+//     int steps = std::stoi(move);
+//     std::cout << "step: " << steps << std::endl;
+//     if (direction == 'L')
+//     {
+//         init -= steps;
+//         if (init < 0)
+//         {
+//             counter += 1 + (steps - temp) / 100;
+//             if (temp == 0)
+//             {
+//                 counter--;
+//             }
+//             std::cout << "count L: " << counter << std::endl;
+//             init %= 100;
+//             init += 100;
+//         }
+//     }
+//     else
+//     {
+//         init += steps;
+//         if (init > 99)
+//         {
+//             std::cout << "here init: " << init << std::endl;
+//             std::cout << "count here: " << counter << std::endl;
+//             counter += 1 + (steps - (100 - temp)) / 100;
+//             if (init == 100){
+//                 counter--;
+//             }
+//             std::cout << "count R: " << counter << std::endl;
+//             init %= 100;
+//         }
+//     }
+//     if (init == 0)
+//     {
+//         counter++;
+//         std::cout << "count at 0: " << counter << std::endl;
+//     }
+//     std::cout << "after: " << init << std::endl;
+// }
+
+int main(void)
+{
+    std::ifstream inFile("testinput.txt");
     std::string fileLine;
     int countLeftPointAt0 = 0;
     int init = 50;
 
-    if (inFile.is_open()){
+    if (inFile.is_open())
+    {
         std::cout << "open success" << std::endl;
-        while (std::getline(inFile,fileLine))
+        while (std::getline(inFile, fileLine))
         {
-            part1_rotateTheSafe(init,countLeftPointAt0,fileLine.at(0),fileLine.substr(1));
-        }   
+            part1_rotateTheSafe(init, countLeftPointAt0, fileLine.at(0), fileLine.substr(1));
+            // part2_rotateTheSafeAndCountClicks(init, countLeftPointAt0, fileLine.at(0), fileLine.substr(1));
+        }
     }
-    std::cout << "Part 1: Total count for Point to 0: " << countLeftPointAt0 << std::endl;
+    std::cout << "Total count for Point to 0: " << countLeftPointAt0 << std::endl;
     return 0;
 }
