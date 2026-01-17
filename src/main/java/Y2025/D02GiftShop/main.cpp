@@ -20,14 +20,14 @@ int main(void){
             std::string token;
             while (std::getline(ss,token,','))
             {
-                rangelist.push_back(token);
+                rangelist.push_back(token); //read individual range to a list
             }
         }
         std::cout << "done" << std::endl;
         
     }
     for(std::string it : rangelist){
-        extractStartEndFromRange(invalidIDList, it);
+        extractStartEndFromRange(invalidIDList, it);    //extract start and end from each range
     }
 
     long long sum = 0;
