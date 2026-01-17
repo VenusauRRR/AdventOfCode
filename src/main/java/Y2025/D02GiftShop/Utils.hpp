@@ -5,7 +5,8 @@
 #include <string>
 #include <vector>
 
-void findInvalidID(std::vector<long long> &storeList, std::string startString, std::string endString);
+void part1_findInvalidID(std::vector<long long> &storeList, std::string startString, std::string endString);
+void part2_findNewInvalidID(std::vector<long long> &storeList, std::string startString, std::string endString);
 
 void extractStartEndFromRange(std::vector<long long> &storeList, std::string range);
 
