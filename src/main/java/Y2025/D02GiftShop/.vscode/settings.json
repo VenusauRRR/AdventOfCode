@@ -1,0 +1,9 @@
+{
+    "makefile.launchConfigurations": [
+        {
+            "cwd": "c:\\Users\\venus\\_GitHubRepos\\AdventOfCode\\src\\main\\java\\Y2025\\D02GiftShop",
+            "binaryPath": "c:\\Users\\venus\\_GitHubRepos\\AdventOfCode\\src\\main\\java\\Y2025\\D02GiftShop\\main",
+            "binaryArgs": []
+        }
+    ]
+}
