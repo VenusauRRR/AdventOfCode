@@ -63,6 +63,6 @@ int main(void)
         sum += it;
     }
     std::cout << "Total joltage: " << static_cast<long long>(sum) << std::endl;
-
+    inFile.close();
     return 0;
 }

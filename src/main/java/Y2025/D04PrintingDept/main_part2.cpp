@@ -146,5 +146,6 @@ int main(void)
     len = list.at(0).length();
     loop(totalSum, list, len);
     std::cout << "total paper roll: " << totalSum << std::endl;
+    inFile.close();
     return 0;
 }

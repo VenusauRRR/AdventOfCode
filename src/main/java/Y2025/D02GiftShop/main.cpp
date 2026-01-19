@@ -37,6 +37,6 @@ int main(void){
     }
 
     std::cout << "Total sum of all invalid IDs: " << sum << std::endl;
-
+    inFile.close();
     return 0;
 }

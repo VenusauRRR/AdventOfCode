@@ -46,6 +46,6 @@ int main(void){
         sum += it;
     }
     std::cout << "Total joltage: " << sum << std::endl;
-
+    inFile.close();
     return 0;
 }

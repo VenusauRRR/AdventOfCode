@@ -107,5 +107,6 @@ int main(void){
     }    
     
     std::cout << "total paper roll: " << totalSum << std::endl;
+    inFile.close();
     return 0;
 }

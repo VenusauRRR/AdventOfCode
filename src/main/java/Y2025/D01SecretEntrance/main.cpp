@@ -79,6 +79,7 @@ int main(void)
             part2_rotateTheSafeAndCountClicks(init, countLeftPointAt0, fileLine.at(0), fileLine.substr(1));
         }
     }
+    inFile.close();
     std::cout << "Total count for Point to 0: " << countLeftPointAt0 << std::endl;
     return 0;
 }
