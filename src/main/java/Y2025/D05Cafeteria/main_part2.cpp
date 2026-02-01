@@ -13,78 +13,68 @@ void printList(std::vector<std::pair<long long, long long>> &list){
     std::cout << std::endl;
 }
 
-void increaseBy1WhenIngredientIsFresh(int &sum, std::vector<std::pair<long long, long long>> &list, long long nr){
-    for(auto it: list){
-        if (nr >= it.first && nr <= it.second){
-            sum += 1;
-            return;
-        }
-    }
-}
-
 void analyseRangeStartEnd(std::vector<std::pair<long long, long long>> &list, long long newStart, long long newEnd)
 {
-    
-        std::cout << "list before: " << std::endl;
-        printList(list);
-        std::cout << "size: " << list.size() << std::endl;
+    std::sort(list.begin(), list.end(), [](const std::pair<long long, long long> &a, const std::pair<long long, long long> &b){
+        return a.first < b.first;
+    });
+    std::cout << "start: " << newStart << ": end: " << newEnd << std::endl;
+        // std::cout << "list before: " << std::endl;
+        // printList(list);
+        // std::cout << "size: " << list.size() << std::endl;
     if (list.size() == 0)
     {
         list.push_back({newStart, newEnd});
-         std::cout << "list after: " << std::endl;
-            printList(list);
+        //  std::cout << "list after: " << std::endl;
+        //     printList(list);
+        return;
+    }
+        for (size_t i = 0; i < list.size()-1; i++)
+    {
+        if (list.at(i).second < list.at(i+1).first){
+            continue;
+        }
         return;
     }
     for (size_t i = 0; i < list.size(); i++)
     {
-        std::cout << newStart << "," << newEnd << std::endl;
-        std::cout << list.at(i).first << std::endl;
-        std::cout << list.at(i).second << std::endl;
-        std::cout << (newStart > list.at(i).first) << std::endl;
-        std::cout << (newStart - list.at(i).second > 0)  << std::endl;
-        std::cout << (newEnd > list.at(i).second) << std::endl;
-        if (newStart >= list.at(i).first && newEnd <= list.at(i).second)
-        {
-        std::cout << "i: " << i << ", newStart: " << newStart << ", newEnd: " << newEnd << std::endl;
-        std::cout << "list for x < start-end < y: " << std::endl;
-        printList(list);
-        return;
-        }
-        else if (newStart <= list.at(i).first && newEnd >= list.at(i).first && newEnd <= list.at(i).second)
-        {
-            list.at(i).first = newStart;
-             std::cout << "list for start < x < end < y: " << std::endl;
-            printList(list);
-            return;
-        }
-        else if (newStart <= list.at(i).first && newEnd >= list.at(i).second)
-        {
+        if (newEnd + 1 == list.at(i).first){
+            std::cout << "yes" << std::endl;
+            long long temp = list.at(i).second;
             list.erase(list.begin() + i);
-            std::cout << "list for start < x - y > end: " << std::endl;
-            printList(list);
-            analyseRangeStartEnd(list, newStart, newEnd);
-        }
-        else if (newStart >= list.at(i).first && newStart <= list.at(i).second && newEnd > list.at(i).second)
-        {
+            return analyseRangeStartEnd(list, newStart, temp);
+        } else if (newEnd == list.at(i).first){
+            list.at(i).first = newStart;
+            return;
+        } else if (newEnd < list.at(i).first){
+            list.push_back({newStart, newEnd});
+            return;
+        }  else if (list.at(i).first<=newStart && newEnd <= list.at(i).second){
+            return;
+        } else if (newStart <= list.at(i).first && list.at(i).first<=newEnd && list.at(i).second >= newEnd){
+            list.at(i).first = newStart;
+            return;
+        }else if (list.at(i).first <= newStart && newStart <= list.at(i).second && list.at(i).second < newEnd){
             long long temp = list.at(i).first;
-            list.erase(list.begin()+i);
-            std::cout << "list for x < start < y < end: " << std::endl;
-            printList(list);
-            std::cout << "temp: " << temp << ", end: " << newEnd << std::endl;
-            analyseRangeStartEnd(list, temp, newEnd);
-        } else {
-            if (i==list.size()-1){
-                std::cout << "add push back: " << newStart << ", " << newEnd << std::endl;
+            list.erase(list.begin() + i);
+            std::cout << "here" << std::endl;
+            return analyseRangeStartEnd(list, temp, newEnd);
+        } else if (list.at(i).second + 1 == newStart){
+            long long temp = list.at(i).first;
+            list.erase(list.begin() + i);
+            return analyseRangeStartEnd(list, temp, newEnd);
+        } else if (list.at(i).second < newStart){
+            if (i == list.size()-1){
                 list.push_back({newStart, newEnd});
                 return;
-            } else {
-                continue;
             }
+        } else if ( newStart < list.at(i).first && list.at(i).second < newEnd){
+            list.erase(list.begin() + i);
+            return analyseRangeStartEnd(list, newStart, newEnd);
         }
     }
-    
-    // printList(list);
-    // std::cout << "first: " << list.end().base()->first << ", second: " << list.end().base()->second << std::endl;
+    printList(list);
+    std::cout << "hello" << std::endl;
 }
 
 void extractRangeStartEnd(std::vector<std::pair<long long, long long>> &list, const std::string &input)
@@ -96,6 +86,7 @@ void extractRangeStartEnd(std::vector<std::pair<long long, long long>> &list, co
 
     std::cout << startStr << "---" << endStr << std::endl;
     analyseRangeStartEnd(list, std::stoll(startStr), std::stoll(endStr));
+    printList(list);
 }
 
 int main(void)
@@ -104,38 +95,29 @@ int main(void)
     std::string fileLine;
     bool isID = false;
     std::vector<std::pair<long long, long long>> rangeList;
-    int sum = 0;
+    long long sum = 0;
 
     if (inFile.is_open())
     {
-        while (std::getline(inFile, fileLine))
+        while (std::getline(inFile, fileLine) && fileLine != "")
         {
-            if (fileLine == "" && isID == false)
-            {
-                isID = true;
-                continue;
-            }
-            if (isID != true)
-            {
-                std::cout << "range: " << fileLine << std::endl;
-                extractRangeStartEnd(rangeList, fileLine);
-            }
-            else
-            {
-                std::cout << "id: " << fileLine << std::endl;
-                increaseBy1WhenIngredientIsFresh(sum, rangeList, std::stoll(fileLine));
-            }
+            
+            extractRangeStartEnd(rangeList, fileLine);
         }
     }
 
+    std::cout << std::endl;
     std::sort(rangeList.begin(), rangeList.end(), [](const std::pair<long long, long long> &a, const std::pair<long long, long long> &b){
         return a.first < b.first;
     });
     for (auto it : rangeList)
     {
-        std::cout << "(" << it.first << ", " << it.second << ")" << " ";
+        // std::cout << "(" << it.first << ", " << it.second << ")" << " ";
+        if (it.first == it.second){
+            std::cout << it.first << " : same : " << it.second << std::endl; 
+        }
+        sum += it.second - it.first +1;
     }
-    std::cout << std::endl;
     std::cout << "sum: " << sum << std::endl;
     inFile.close();
     return 0;
