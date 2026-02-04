@@ -18,15 +18,9 @@ void analyseRangeStartEnd(std::vector<std::pair<long long, long long>> &list, lo
     std::sort(list.begin(), list.end(), [](const std::pair<long long, long long> &a, const std::pair<long long, long long> &b){
         return a.first < b.first;
     });
-    std::cout << "start: " << newStart << ": end: " << newEnd << std::endl;
-        // std::cout << "list before: " << std::endl;
-        // printList(list);
-        // std::cout << "size: " << list.size() << std::endl;
     if (list.size() == 0)
     {
         list.push_back({newStart, newEnd});
-        //  std::cout << "list after: " << std::endl;
-        //     printList(list);
         return;
     }
         for (size_t i = 0; i < list.size()-1; i++)
@@ -39,7 +33,6 @@ void analyseRangeStartEnd(std::vector<std::pair<long long, long long>> &list, lo
     for (size_t i = 0; i < list.size(); i++)
     {
         if (newEnd + 1 == list.at(i).first){
-            std::cout << "yes" << std::endl;
             long long temp = list.at(i).second;
             list.erase(list.begin() + i);
             return analyseRangeStartEnd(list, newStart, temp);
@@ -57,7 +50,6 @@ void analyseRangeStartEnd(std::vector<std::pair<long long, long long>> &list, lo
         }else if (list.at(i).first <= newStart && newStart <= list.at(i).second && list.at(i).second < newEnd){
             long long temp = list.at(i).first;
             list.erase(list.begin() + i);
-            std::cout << "here" << std::endl;
             return analyseRangeStartEnd(list, temp, newEnd);
         } else if (list.at(i).second + 1 == newStart){
             long long temp = list.at(i).first;
@@ -73,8 +65,6 @@ void analyseRangeStartEnd(std::vector<std::pair<long long, long long>> &list, lo
             return analyseRangeStartEnd(list, newStart, newEnd);
         }
     }
-    printList(list);
-    std::cout << "hello" << std::endl;
 }
 
 void extractRangeStartEnd(std::vector<std::pair<long long, long long>> &list, const std::string &input)
@@ -84,9 +74,7 @@ void extractRangeStartEnd(std::vector<std::pair<long long, long long>> &list, co
     std::getline(ss, startStr, '-');
     std::getline(ss, endStr, '-');
 
-    std::cout << startStr << "---" << endStr << std::endl;
     analyseRangeStartEnd(list, std::stoll(startStr), std::stoll(endStr));
-    printList(list);
 }
 
 int main(void)
@@ -112,13 +100,12 @@ int main(void)
     });
     for (auto it : rangeList)
     {
-        // std::cout << "(" << it.first << ", " << it.second << ")" << " ";
         if (it.first == it.second){
             std::cout << it.first << " : same : " << it.second << std::endl; 
         }
         sum += it.second - it.first +1;
     }
-    std::cout << "sum: " << sum << std::endl;
+    std::cout << "Part 2 sum: " << sum << std::endl;
     inFile.close();
     return 0;
 }
