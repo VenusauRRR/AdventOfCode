@@ -61,6 +61,7 @@ void fileReader(std::vector<Row> &list, std::vector<std::string> &signList)
             }
         }
     }
+    inFile.close();
 }
 
 int main(void)
