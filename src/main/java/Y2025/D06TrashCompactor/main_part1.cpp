@@ -22,18 +22,6 @@ bool isDigit(std::string sign)
     }
 }
 
-// void printList(std::vector<Row> &list)
-// {
-//     for (auto it : list)
-//     {
-//         for (size_t i = 0; i < it.numbers.size(); i++)
-//         {
-//             std::cout << it.numbers.at(i) << " ";
-//         }
-//         std::cout << std::endl;
-//     }
-// }
-
 void fileReader(std::vector<Row> &list, std::vector<std::string> &signList)
 {
     std::ifstream inFile("input.txt");
