@@ -13,7 +13,6 @@ void fileReader(std::vector<std::string> &strList){
         while (std::getline(inFile, fileLine))
         {
             strList.push_back(fileLine);
-            // std::cout << fileLine << std::endl;
         }
     }
     inFile.close();
@@ -39,33 +38,24 @@ bool ifIndexNotExist(int idx, std::vector<int> &idxList){
 }
 
 void recursion(std::string s, int idx, std::vector<int> &newIdxList, long long &countSplit){
-    // auto it = std::find_if(idxList.begin(),idxList.end(),[idx](int p){
-    //     return p == idx;
-    // });
     int idxSplit_L, idxSplit_R;
 
     if (s.at(idx) == '^'){
         countSplit++;
         idxSplit_L = idx -1;
         idxSplit_R = idx +1;
-        // std::cout << idxSplit_L << ", " << idxSplit_R << std::endl;
-
         if (idxSplit_L >= 0 && ifIndexNotExist(idxSplit_L, newIdxList)){
             newIdxList.push_back(idxSplit_L);
-            
         }
         if (idxSplit_R < s.size() && ifIndexNotExist(idxSplit_R, newIdxList)){
             newIdxList.push_back(idxSplit_R);
         }
-        // idxList.erase(it);
     } else {
         if (ifIndexNotExist(idx, newIdxList)){
             newIdxList.push_back(idx);
         }
-        // std::cout << idx << std::endl;
     }
 }
-
 
 int main(void){
 
@@ -85,23 +75,9 @@ int main(void){
             recursion(strList[i], idxList[j], newIdxList, countSplit);
         }
         idxList.clear();
-        // std::cout << "newidxList size: " << newIdxList.size() << std::endl;
         idxList = newIdxList;
-        // std::cout << "idxList new size: " << idxList.size() << std::endl;
-        
         newIdxList.clear();
-        // std::cout << "split: ";
-        // for (size_t i = 0; i < idxList.size(); i++)
-        // {
-        //     std::cout << idxList.at(i) << ", ";
-        // }
-        // std::cout << std::endl;
-        
-
     }
-    
-    // std::cout << "S index: " << idx_init << std::endl;
-    // std::cout << "count: " << countSplit << std::endl;
     std::cout << "part 1 count: " << countSplit << std::endl;
 
     return 0;
