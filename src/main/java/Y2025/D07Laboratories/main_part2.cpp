@@ -6,7 +6,7 @@
 #include <algorithm>
 
 void fileReader(std::vector<std::string> &strList){
-    std::ifstream inFile("input.txt");
+    std::ifstream inFile("testinput.txt");
     std::string fileLine;
     if (inFile.is_open())
     {
@@ -37,23 +37,20 @@ bool ifIndexNotExist(int idx, std::vector<int> &idxList){
     return it == idxList.end();
 }
 
-void recursion(std::string s, int idx, std::vector<int> &newIdxList, long long &countSplit){
+void recursion(std::string s, int idx, std::vector<int> &newIdxList, long long &totalTimeline){
     int idxSplit_L, idxSplit_R;
 
     if (s.at(idx) == '^'){
-        countSplit++;
         idxSplit_L = idx -1;
         idxSplit_R = idx +1;
-        if (idxSplit_L >= 0 && ifIndexNotExist(idxSplit_L, newIdxList)){
+        if (idxSplit_L >= 0){
             newIdxList.push_back(idxSplit_L);
         }
-        if (idxSplit_R < s.size() && ifIndexNotExist(idxSplit_R, newIdxList)){
+        if (idxSplit_R < s.size()){
             newIdxList.push_back(idxSplit_R);
         }
     } else {
-        if (ifIndexNotExist(idx, newIdxList)){
-            newIdxList.push_back(idx);
-        }
+        newIdxList.push_back(idx);
     }
 }
 
@@ -63,6 +60,7 @@ int main(void){
     std::vector<int> idxList;
     long long countSplit = 0;
     int idx_init;
+    long long totalTimeline = 1;
 
     fileReader(strList);
     findLetterSIndex(strList, idxList, idx_init);
@@ -72,20 +70,21 @@ int main(void){
         std::vector<int> newIdxList;
         for (size_t j = 0; j < idxList.size(); j++)
         {
-            recursion(strList[i], idxList[j], newIdxList, countSplit);
+            recursion(strList[i], idxList[j], newIdxList, totalTimeline);
         }
         idxList.clear();
         idxList = newIdxList;
         newIdxList.clear();
-        std::cout << "split: ";
-        for (size_t i = 0; i < idxList.size(); i++)
-        {
-            std::cout << i << ", ";
-        }
-        std::cout << std::endl;
+        // std::cout << "split: ";
+        // for (size_t i = 0; i < idxList.size(); i++)
+        // {
+        //     std::cout << idxList.at(i) << ", ";
+        // }
+        // std::cout << std::endl;
         
     }
     std::cout << "part 1 count: " << countSplit << std::endl;
+    std::cout << "part 2 total timeline count: " << idxList.size() << std::endl;
 
     return 0;
 }
