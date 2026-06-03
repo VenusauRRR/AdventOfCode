@@ -5,8 +5,8 @@
 #include <cmath>
 #include <algorithm>
 
-#define connectionPairs 10
-#define inputDataPath "testinput.txt"
+#define connectionPairs 1000
+#define inputDataPath "input.txt"
 
 struct JunctionBox
 {
@@ -70,7 +70,8 @@ bool isBoxExist(JunctionBox *target, JunctionBox *box)
 
 void updateCircuitList(std::vector<Circuit> &circuitList, std::vector<Distance> &distanceList)
 {
-    Circuit *circuit_box1, *circuit_box2;
+    Circuit *circuit_1, *circuit_2;
+    size_t circuitNr_1, circuitNr_2 = -1;
 
     for (size_t i = 0; i < distanceList.size(); i++)
     {
@@ -93,7 +94,8 @@ void updateCircuitList(std::vector<Circuit> &circuitList, std::vector<Distance> 
             {
                 if (isBoxExist(circuitList.at(j).boxes.at(k), distanceList.at(i).b1))
                 {
-                    circuit_box1 = &circuitList.at(j);
+                    circuit_1 = &circuitList.at(j);
+                    circuitNr_1 = j;
                     isBox1Found = true;
                     break;
                 }
@@ -110,7 +112,8 @@ void updateCircuitList(std::vector<Circuit> &circuitList, std::vector<Distance> 
             {
                 if (isBoxExist(circuitList.at(j).boxes.at(k), distanceList.at(i).b2))
                 {
-                    circuit_box2 = &circuitList.at(j);
+                    circuit_2 = &circuitList.at(j);
+                    circuitNr_2 = j;
                     isBox2Found = true;
                     break;
                 }
@@ -121,19 +124,45 @@ void updateCircuitList(std::vector<Circuit> &circuitList, std::vector<Distance> 
             }
         }
 
+        // std::cout << "(" << distanceList.at(i).b1->x << "," << distanceList.at(i).b1->y << "," << distanceList.at(i).b1->z << ")";
+        // std::cout << "(" << distanceList.at(i).b2->x << "," << distanceList.at(i).b2->y << "," << distanceList.at(i).b2->z << ")"
+        //           << distanceList.at(i).distance << ", isBox1Found: " << isBox1Found << ", isBox2Found: " << isBox2Found
+        //           << ", circuitNr_1: " << circuitNr_1 << ", circuitNr_2: " << circuitNr_2 << std::endl;
         if (isBox1Found && isBox2Found)
         {
-            continue;
+            if (circuitNr_1 != circuitNr_2)
+            {
+                Circuit temp;
+                for (size_t i = 0; i < circuit_1->boxes.size(); i++)
+                {
+                    temp.boxes.push_back(circuit_1->boxes.at(i));
+                }
+                for (size_t i = 0; i < circuit_2->boxes.size(); i++)
+                {
+                    temp.boxes.push_back(circuit_2->boxes.at(i));
+                }
+                if (circuitNr_1 > circuitNr_2)
+                {
+                    circuitList.erase(circuitList.begin() + circuitNr_1);
+                    circuitList.erase(circuitList.begin() + circuitNr_2);
+                }
+                else
+                {
+                    circuitList.erase(circuitList.begin() + circuitNr_2);
+                    circuitList.erase(circuitList.begin() + circuitNr_1);
+                }
+                circuitList.push_back(temp);
+            }
         }
         else if ((isBox1Found || isBox2Found))
         {
             if (isBox1Found)
             {
-                circuit_box1->boxes.push_back(distanceList.at(i).b2);
+                circuit_1->boxes.push_back(distanceList.at(i).b2);
             }
             else
             {
-                circuit_box2->boxes.push_back(distanceList.at(i).b1);
+                circuit_2->boxes.push_back(distanceList.at(i).b1);
             }
         }
         else
@@ -143,6 +172,18 @@ void updateCircuitList(std::vector<Circuit> &circuitList, std::vector<Distance> 
             temp.boxes.push_back(distanceList.at(i).b2);
             circuitList.push_back(temp);
         }
+
+        // std::cout << "Circuit List:-" << std::endl;
+        // for (size_t i = 0; i < circuitList.size(); i++)
+        // {
+        //     for (size_t j = 0; j < circuitList.at(i).boxes.size(); j++)
+        //     {
+        //         std::cout << "(" << circuitList.at(i).boxes.at(j)->x << ","
+        //                   << circuitList.at(i).boxes.at(j)->y << ","
+        //                   << circuitList.at(i).boxes.at(j)->z << ")" << ",";
+        //     }
+        //     std::cout << "*" << std::endl;
+        // }
     }
 }
 
@@ -189,13 +230,13 @@ int main(void)
         d2.push_back(distanceList.at(i));
     }
 
-    std::cout << "Distance:-" << std::endl;
-    for (auto it : d2)
-    {
-        std::cout << "(" << it.b1->x << "," << it.b1->y << "," << it.b1->z << ")";
-        std::cout << "(" << it.b2->x << "," << it.b2->y << "," << it.b2->z << ")"
-                  << it.distance << std::endl;
-    }
+    // std::cout << "Distance:-" << std::endl;
+    // for (auto it : d2)
+    // {
+    //     std::cout << "(" << it.b1->x << "," << it.b1->y << "," << it.b1->z << ")";
+    //     std::cout << "(" << it.b2->x << "," << it.b2->y << "," << it.b2->z << ")"
+    //               << it.distance << std::endl;
+    // }
 
     updateCircuitList(circuitList, d2);
 
@@ -204,17 +245,17 @@ int main(void)
     std::sort(circuitList.begin(), circuitList.end(), [](const Circuit &a, const Circuit &b)
               { return a.boxes.size() > b.boxes.size(); });
 
-    std::cout << "Circuit List:-" << std::endl;
-    for (size_t i = 0; i < circuitList.size(); i++)
-    {
-        for (size_t j = 0; j < circuitList.at(i).boxes.size(); j++)
-        {
-            std::cout << "(" << circuitList.at(i).boxes.at(j)->x << ","
-                      << circuitList.at(i).boxes.at(j)->y << ","
-                      << circuitList.at(i).boxes.at(j)->z << ")" << ",";
-        }
-        std::cout << "*" << std::endl;
-    }
+    // std::cout << "Circuit List:-" << std::endl;
+    // for (size_t i = 0; i < circuitList.size(); i++)
+    // {
+    //     for (size_t j = 0; j < circuitList.at(i).boxes.size(); j++)
+    //     {
+    //         std::cout << "(" << circuitList.at(i).boxes.at(j)->x << ","
+    //                   << circuitList.at(i).boxes.at(j)->y << ","
+    //                   << circuitList.at(i).boxes.at(j)->z << ")" << ",";
+    //     }
+    //     std::cout << "*" << std::endl;
+    // }
 
     int sum = 0;
     for (auto it : circuitList)
