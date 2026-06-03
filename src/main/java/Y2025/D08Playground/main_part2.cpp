@@ -280,7 +280,7 @@ int main(void)
         sum += it.boxes.size();
     }
 
-    unsigned long long multipyXcoordinates = last2Boxes.b1->x * last2Boxes.b2->x;
+    unsigned int multipyXcoordinates = (last2Boxes.b1->x) * (last2Boxes.b2->x);
 
     // std::cout << "Total junction boxes: " << junctionBoxList.size() << std::endl;
     // std::cout << "Sum junction boxes in all circuilts: " << sum << std::endl;
