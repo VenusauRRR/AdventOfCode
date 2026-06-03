@@ -128,10 +128,6 @@ void updateCircuitList(std::vector<Circuit> &circuitList, std::vector<Distance> 
             }
         }
 
-        // std::cout << "(" << distanceList.at(i).b1->x << "," << distanceList.at(i).b1->y << "," << distanceList.at(i).b1->z << ")";
-        // std::cout << "(" << distanceList.at(i).b2->x << "," << distanceList.at(i).b2->y << "," << distanceList.at(i).b2->z << ")"
-        //           << distanceList.at(i).distance << ", isBox1Found: " << isBox1Found << ", isBox2Found: " << isBox2Found
-        //           << ", circuitNr_1: " << circuitNr_1 << ", circuitNr_2: " << circuitNr_2 << std::endl;
         if (isBox1Found && isBox2Found)
         {
             if (circuitNr_1 != circuitNr_2)
@@ -177,18 +173,7 @@ void updateCircuitList(std::vector<Circuit> &circuitList, std::vector<Distance> 
             circuitList.push_back(temp);
         }
 
-        // std::cout << "Circuit List:-" << std::endl;
-        // for (size_t i = 0; i < circuitList.size(); i++)
-        // {
-        //     for (size_t j = 0; j < circuitList.at(i).boxes.size(); j++)
-        //     {
-        //         std::cout << "(" << circuitList.at(i).boxes.at(j)->x << ","
-        //                   << circuitList.at(i).boxes.at(j)->y << ","
-        //                   << circuitList.at(i).boxes.at(j)->z << ")" << ",";
-        //     }
-        //     std::cout << "*" << std::endl;
-        // }
-
+        // Part 2: find the last pair of junction boxes that connect all the junction boxes to a single circuit
         if (circuitList.size() == 1 && circuitList.at(0).boxes.size() == prevSingleCircuitSize)
         {
             continue;
@@ -198,7 +183,6 @@ void updateCircuitList(std::vector<Circuit> &circuitList, std::vector<Distance> 
             last2Boxes = distanceList.at(i);
         }
         prevSingleCircuitSize = circuitList.at(0).boxes.size();
-        // prevTotalCircuitSize = circuitList.size();
     }
 }
 
@@ -226,19 +210,10 @@ int main(void)
         }
     }
 
-    // printCircuitList(junctionBoxList);
-
     calcuateSeperateTable(distanceList, junctionBoxList);
 
     std::sort(distanceList.begin(), distanceList.end(), [](const Distance &a, const Distance &b)
               { return a.distance < b.distance; });
-    // std::cout << "Distance:-" << std::endl;
-    // for (auto it : distanceList)
-    // {
-    //     std::cout << "(" << it.b1->x << "," << it.b1->y << "," << it.b1->z << ")";
-    //     std::cout << "(" << it.b2->x << "," << it.b2->y << "," << it.b2->z << ")"
-    //               << it.distance << std::endl;
-    // }
 
     std::vector<Distance> d2;
 
@@ -247,32 +222,10 @@ int main(void)
         d2.push_back(distanceList.at(i));
     }
 
-    // std::cout << "Distance:-" << std::endl;
-    // for (auto it : d2)
-    // {
-    //     std::cout << "(" << it.b1->x << "," << it.b1->y << "," << it.b1->z << ")";
-    //     std::cout << "(" << it.b2->x << "," << it.b2->y << "," << it.b2->z << ")"
-    //               << it.distance << std::endl;
-    // }
-
     updateCircuitList(circuitList, distanceList, last2Boxes);
-
-    // formCircuitList(circuitList, d2);
 
     std::sort(circuitList.begin(), circuitList.end(), [](const Circuit &a, const Circuit &b)
               { return a.boxes.size() > b.boxes.size(); });
-
-    // std::cout << "Circuit List:-" << std::endl;
-    // for (size_t i = 0; i < circuitList.size(); i++)
-    // {
-    //     for (size_t j = 0; j < circuitList.at(i).boxes.size(); j++)
-    //     {
-    //         std::cout << "(" << circuitList.at(i).boxes.at(j)->x << ","
-    //                   << circuitList.at(i).boxes.at(j)->y << ","
-    //                   << circuitList.at(i).boxes.at(j)->z << ")" << ",";
-    //     }
-    //     std::cout << "*" << std::endl;
-    // }
 
     int sum = 0;
     for (auto it : circuitList)
@@ -282,11 +235,6 @@ int main(void)
 
     unsigned int multipyXcoordinates = (last2Boxes.b1->x) * (last2Boxes.b2->x);
 
-    // std::cout << "Total junction boxes: " << junctionBoxList.size() << std::endl;
-    // std::cout << "Sum junction boxes in all circuilts: " << sum << std::endl;
-    // std::cout << "Multipy first 3 largest circuits: "
-    //           << circuitList.at(0).boxes.size() * circuitList.at(1).boxes.size() * circuitList.at(2).boxes.size()
-    //           << std::endl;
     std::cout << "Last 2 boxes: (" << last2Boxes.b1->x << "," << last2Boxes.b1->y << "," << last2Boxes.b1->z << ")"
               << "(" << last2Boxes.b2->x << "," << last2Boxes.b2->y << "," << last2Boxes.b2->z << ")" << last2Boxes.distance << std::endl;
     std::cout << "multipy 2 X coordinates: " << multipyXcoordinates << std::endl;
